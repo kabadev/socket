@@ -1,4 +1,12 @@
-const io = require("socket.io")(8900, {
+const express = require("express");
+const app = express();
+const http = require("http").createServer(app);
+
+http.listen(5000, () => {
+  console.log(`Listening on port 5000`);
+});
+
+const io = require("socket.io")(http, {
   cors: {
     origin: "http://localhost:3000",
   },
