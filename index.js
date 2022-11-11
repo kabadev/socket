@@ -1,14 +1,17 @@
 const express = require("express");
 const app = express();
-const http = require("http").createServer(app);
+const http = require("http");
+const { Server } = require("socket.io");
+const cors = require("cors");
 
-http.listen(5000, () => {
-  console.log(`Listening on port 5000`);
-});
+app.use(cors());
 
-const io = require("socket.io")(http, {
+const server = http.createServer(app);
+
+const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
   },
 });
 
@@ -54,4 +57,8 @@ io.on("connection", (socket) => {
     removeUser(socket.id);
     io.emit("getUsers", users);
   });
+});
+
+server.listen(5000, () => {
+  console.log("SERVER IS RUNNING");
 });
